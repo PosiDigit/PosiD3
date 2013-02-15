@@ -42,15 +42,15 @@ body {
   };
 
   var width = 960,
-      height = 500,
+      height = 700,
       radius = Math.min(width, height) / 2;
 
   //maybe we should select some random colours
   var color = d3.scale.ordinal()
-      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+  .range(["grey", "steelblue"]);
 
   var arc = d3.svg.arc()
-      .outerRadius(radius - 10)
+      .outerRadius(radius)
       .innerRadius(0);
 
   var pie = d3.layout.pie()
@@ -64,7 +64,7 @@ body {
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-  d3.json("../data/d3Data.mini.json", function(error, data) {
+  d3.json("../data/d3Data.json", function(error, data) {
     data = convert_data(data);
 
     data.forEach(function(d) {

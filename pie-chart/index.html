@@ -1,42 +1,22 @@
 <!DOCTYPE html>
+<html>
+<head>
 <!-- Based on this example http://bl.ocks.org/3888852#index.html -->
 <meta charset="utf-8">
-<style>
+<style type="text/css">
+  body {
+    font: 10px sans-serif;
+  }
 
-body {
-  font: 10px sans-serif;
-}
-
-.arc path {
-  stroke: #fff;
-}
-
+  .arc path {
+    stroke: #fff;
+  }
 </style>
-<body>
+
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="./js/underscore-min.js"></script>
+
 <script>
-
-  var convert_data = function(data) {
-    var converted = [];
-
-    data.forEach(function(d) {
-      var record;
-
-      if(record = _.find(converted, function(obj) { return obj.series_name == d.relation_ispartofseries })) {
-        record.num++;
-        record = null;
-      } else {
-        converted.push({
-          series_name: d.relation_ispartofseries,
-          num:         1
-        });
-      }
-    });
-
-    return converted;
-  };
-
   //need variable for uniq relation_ispartofseries column values
   //need variable for count of relation_ispartofseries uniq column values
 
@@ -62,6 +42,26 @@ body {
       .attr("height", height)
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  var convert_data = function(data) {
+    var converted = [];
+
+    data.forEach(function(d) {
+      var record;
+
+      if(record = _.find(converted, function(obj) { return obj.series_name == d.relation_ispartofseries })) {
+        record.num++;
+        record = null;
+      } else {
+        converted.push({
+          series_name: d.relation_ispartofseries,
+          num:         1
+        });
+      }
+    });
+
+    return converted;
+  };
 
   d3.json("../data/d3Data.mini.json", function(error, data) {
     data = convert_data(data);
@@ -89,3 +89,7 @@ body {
   });
 
 </script>
+</head>
+<body>
+</body>
+</html>

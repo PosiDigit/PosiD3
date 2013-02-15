@@ -42,7 +42,7 @@ body {
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-  d3.json("../data/d3Data.json", function(error, data) {
+  d3.json("../data/d3Data.mini.json", function(error, data) {
     console.log(data);
 
     data.forEach(function(d) {

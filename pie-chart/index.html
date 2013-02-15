@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Based on this example http://bl.ocks.org/3888852#index.html -->
+<!-- Based on this example http://bl.ocks.org/mbostock/3887235 -->
 <meta charset="utf-8">
 <style type="text/css">
-  body {
-    font: 10px sans-serif;
-  }
 
-  .arc path {
-    stroke: #fff;
-  }
+body {
+  font: 10px sans-serif;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
 </style>
-
 <script src="http://d3js.org/d3.v3.js"></script>
 <script src="./js/underscore-min.js"></script>
-
+</head>
+<body>
 <script>
   //need variable for uniq relation_ispartofseries column values
   //need variable for count of relation_ispartofseries uniq column values
+  var convert_data = function(data) {
+    var converted = [];
+
+    data.forEach(function(d) {
+      var record;
+
+      if(record = _.find(converted, function(obj) { return obj.series_name == d.relation_ispartofseries })) {
+        record.num++;
+        record = null;
+      } else {
+        converted.push({
+          series_name: d.relation_ispartofseries,
+          num:         1
+        });
+      }
+    });
+
+    return converted;
+  };
 
   var width = 960,
       height = 500,
@@ -42,26 +63,6 @@
       .attr("height", height)
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-  var convert_data = function(data) {
-    var converted = [];
-
-    data.forEach(function(d) {
-      var record;
-
-      if(record = _.find(converted, function(obj) { return obj.series_name == d.relation_ispartofseries })) {
-        record.num++;
-        record = null;
-      } else {
-        converted.push({
-          series_name: d.relation_ispartofseries,
-          num:         1
-        });
-      }
-    });
-
-    return converted;
-  };
 
   d3.json("../data/d3Data.mini.json", function(error, data) {
     data = convert_data(data);
@@ -89,7 +90,5 @@
   });
 
 </script>
-</head>
-<body>
 </body>
 </html>

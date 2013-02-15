@@ -14,8 +14,9 @@ body {
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.js"></script>
+<script src="./js/underscore-min.js"></script>
 <script>
-  
+
   //need variable for uniq relation_ispartofseries column values
   //need variable for count of relation_ispartofseries uniq column values
 
@@ -42,8 +43,28 @@ body {
     .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
+  var convert_data = function(data) {
+    var converted = [];
+
+    data.forEach(function(d) {
+      var record;
+
+      if(record = _.find(converted, function(obj) { return obj.series_name == d.relation_ispartofseries })) {
+        record.num++;
+        record = null;
+      } else {
+        converted.push({
+          series_name: d.relation_ispartofseries,
+          num:         1
+        });
+      }
+    });
+
+    return converted;
+  };
+
   d3.json("../data/d3Data.mini.json", function(error, data) {
-    console.log(data);
+    data = convert_data(data);
 
     data.forEach(function(d) {
       d.population = +d.population;

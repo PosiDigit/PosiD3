@@ -17,32 +17,6 @@ body {
 <script src="./js/underscore-min.js"></script>
 <script>
 
-  //need variable for uniq relation_ispartofseries column values
-  //need variable for count of relation_ispartofseries uniq column values
-
-  var width = 960,
-      height = 500,
-      radius = Math.min(width, height) / 2;
-
-  //maybe we should select some random colours
-  var color = d3.scale.ordinal()
-      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-  var arc = d3.svg.arc()
-      .outerRadius(radius - 10)
-      .innerRadius(radius - 0);
-
-  var pie = d3.layout.pie()
-      .sort(null)
-      //need to grab uniq values column 'relation_ispartofseries', then count
-      .value(function(d) { return d.whatevervariablewedecidetocallthisvariable; });
-
-  var svg = d3.select("body").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-    .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
   var convert_data = function(data) {
     var converted = [];
 
@@ -63,11 +37,37 @@ body {
     return converted;
   };
 
+  //need variable for uniq relation_ispartofseries column values
+  //need variable for count of relation_ispartofseries uniq column values
+
+  var width = 960,
+      height = 500,
+      radius = Math.min(width, height) / 2;
+
+  //maybe we should select some random colours
+  var color = d3.scale.ordinal()
+      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+  var arc = d3.svg.arc()
+      .outerRadius(radius - 10)
+      .innerRadius(radius - 0);
+
+  var pie = d3.layout.pie()
+      .sort(null)
+      //need to grab uniq values column 'relation_ispartofseries', then count
+      .value(function(d) { return d.num; });
+
+  var svg = d3.select("body").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
   d3.json("../data/d3Data.mini.json", function(error, data) {
     data = convert_data(data);
 
     data.forEach(function(d) {
-      d.population = +d.population;
+      d.num = +d.num;
     });
 
     //need uniq values of 'relation_ispartofseries'
@@ -78,13 +78,13 @@ body {
 
     g.append("path")
         .attr("d", arc)
-        .style("fill", function(d) { return color(d.data.relation_ispartofseries); });
+        .style("fill", function(d) { return color(d.data.series_name); });
 
     g.append("text")
         .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
         .attr("dy", ".35em")
         .style("text-anchor", "middle")
-        .text(function(d) { return d.data.relation_ispartofseries; });
+        .text(function(d) { return d.data.series_name; });
 
   });
 
